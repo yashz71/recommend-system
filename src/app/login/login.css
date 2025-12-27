@@ -1,0 +1,106 @@
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #050a0f; /* Match globe background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Futuristic background decoration */
+.glow-circle {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.2) 0%, rgba(5, 10, 15, 0) 70%);
+  border-radius: 50%;
+  top: 10%;
+  left: 20%;
+}
+
+.login-card {
+  width: 400px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.03) !important; /* Transparent glass */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+mat-card-title {
+  color: #00bcd4 !important; /* Cyan */
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-align: center;
+  font-size: 2rem !important;
+}
+
+mat-card-subtitle {
+  color: rgba(0, 188, 212, 0.7) !important;
+  text-align: center;
+  margin-bottom: 30px !important;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Styling Input Fields for Dark Mode */
+::ng-deep .mat-mdc-form-field-label {
+  color: rgba(0, 188, 212, 0.8) !important;
+}
+
+::ng-deep .mdc-notched-outline__leading,
+::ng-deep .mdc-notched-outline__notch,
+::ng-deep .mdc-notched-outline__trailing {
+  border-color: rgba(0, 188, 212, 0.3) !important;
+}
+
+::ng-deep .mat-mdc-form-field-input-control {
+  color: white !important;
+}
+
+.login-btn {
+  width: 100%;
+  height: 50px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  background-color: #ff9800 !important; /* Neojet Orange */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+}
+
+.signup-link {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 20px;
+}
+
+.signup-link span {
+  color: #00bcd4;
+  cursor: pointer;
+}
+::ng-deep .error-snackbar {
+  background-color: #f44336 !important; /* Red */
+  color: white !important;
+}
+
+/* Center the spinner inside the button */
+mat-spinner {
+  margin: 0 auto;
+}
+
+.login-btn:disabled {
+  background-color: rgba(255, 152, 0, 0.3) !important;
+  color: rgba(255, 255, 255, 0.3);
+}

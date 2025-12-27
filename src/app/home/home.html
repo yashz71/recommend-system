@@ -1,0 +1,88 @@
+<div class="main-content">
+  <div class="search-panel">
+    <mat-stepper orientation="vertical" (selectionChange)="handleStepChange($event)" #stepper>
+      
+      <mat-step [stepControl]="routeForm">
+        <form [formGroup]="routeForm">
+          <ng-template matStepLabel>Departure Origin</ng-template>
+          <mat-form-field appearance="outline" class="full-width space-field">
+            <mat-label>Leaving from...</mat-label>
+            <mat-select formControlName="departureCity" style="color:#00bcd4">
+              @for (city of flightService.cities(); track city) {
+                <mat-option [value]="city">{{ city }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <button mat-button matStepperNext type="button">Next: Arrival</button>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="routeForm">
+        <form [formGroup]="routeForm">
+          <ng-template matStepLabel>Destination</ng-template>
+          <mat-form-field appearance="outline" class="full-width space-field">
+            <mat-label>Going to...</mat-label>
+            <mat-select formControlName="arrivalCity" style="color:#00bcd4">
+              @for (city of flightService.cities(); track city) {
+                <mat-option [value]="city">{{ city }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="actions">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext type="button">Next: Details</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="detailsForm">
+        <form [formGroup]="detailsForm">
+          <ng-template matStepLabel>Preferences</ng-template>
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="space-field">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="departureDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="space-field">
+              <mat-label>Class</mat-label>
+              <mat-select formControlName="seatClass" style="color:#00bcd4">
+                <mat-option value="Economy">Economy</mat-option>
+                <mat-option value="Business">Business</mat-option>
+                <mat-option value="First">First</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <button mat-flat-button color="accent" class="full-width" (click)="onSearch()">Confirm & Search</button>
+        </form>
+      </mat-step>
+
+    </mat-stepper>
+    @if (flightService.isSearching()) {
+      <mat-spinner></mat-spinner>
+    } @else {
+      <div class="results-list">
+        @for (flight of flightService.searchResults(); track flight.flightNumber) {
+          <mat-card class="flight-card">
+            <mat-card-header>
+              <mat-card-title>{{ flight.airlineName }} - {{ flight.flightNumber }}</mat-card-title>
+              <mat-card-subtitle>{{ flight.depCityName }} ✈ {{ flight.arrCityName }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Departure: {{ flight.departure | date:'short' }}</p>
+              <p>Price: {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
+            </mat-card-content>
+          </mat-card>
+        } @empty {
+          <p>No flights found for these criteria.</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="globe-wrapper">
+    <div #globeContainer class="globe-canvas"></div>
+  </div>
+</div>

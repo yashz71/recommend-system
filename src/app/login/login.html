@@ -1,0 +1,46 @@
+<div class="login-container">
+  <div class="glow-circle"></div>
+
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>NEOJET</mat-card-title>
+      <mat-card-subtitle>Welcome back, Pilot.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput formControlName="email" placeholder="name@neojet.com">
+          <mat-icon matSuffix>email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button mat-flat-button 
+        color="accent" 
+        class="login-btn" 
+        type="submit" 
+        [disabled]="!loginForm.valid || isLoading">
+  @if(!isLoading) {
+  <span >LOG IN</span>}
+  @if(isLoading) {
+    <mat-spinner diameter="24" color="primary"></mat-spinner>
+  }
+</button>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <p (click)="goToRegister()" class="signup-link">Don't have an account? <span>Sign up</span></p>
+    </mat-card-footer>
+  </mat-card>
+</div>
