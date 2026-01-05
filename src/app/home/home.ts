@@ -12,9 +12,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper';
 import Globe, { GlobeInstance } from 'globe.gl';
-import { FlighstService } from '../services/flighst-service';
+import { FlightsService } from '../services/flights-service';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from "@angular/material/card";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -36,15 +37,16 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent }
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    MatCardSubtitle,
     MatCardContent
 ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements AfterViewInit ,OnInit {
+  public router = inject(Router);
 
-  public flightService = inject(FlighstService);
+
+  public flightService = inject(FlightsService);
   ngOnInit(){
   this.flightService.loadCities();
   }
@@ -68,6 +70,10 @@ export class Home implements AfterViewInit ,OnInit {
       seatClass: ['Economy'],
       maxPrice: [null]
     });
+  }
+  viewDetails(flightNumber: string) {
+    // Navigate to /flight/FL123
+    this.router.navigate(['/Flight', flightNumber]);
   }
 
  ngAfterViewInit() {
@@ -144,14 +150,31 @@ resize() {
     });
   }
   onSearch() {
+    const rawDate = this.detailsForm.value.departureDate;
+    let formattedDate = undefined;
+  
+
+  if (rawDate) {
+    const d = new Date(rawDate);
+  
+  // 2. Set time to noon to prevent timezone shifts
+  d.setDate(d.getDate());
+    
+  // 2. Set to noon to stay safely within the date boundary during UTC conversion
+  d.setHours(12, 0, 0, 0); 
+  
+  // 3. Convert to ISO and grab only the YYYY-MM-DD part
+  formattedDate = d.toISOString().split('T')[0];
+  }
+  
     const searchData = {
       departureCity: this.routeForm.value.departureCity,
-      arrivalCity: this.routeForm.value.arrivalCity,
-      departureDate: this.detailsForm.value.departureDate?.toISOString().split('T')[0],
-      seatClass: this.detailsForm.value.seatClass,
-      // Add any other fields your FlightSearchInput expects
+      arrivalCity: this.routeForm.value.arrivalCity, 
+      departureDate: formattedDate, // Now sends exactly "YYYY-MM-DD"
+      seatClass: this.detailsForm.value.seatClass
     };
   
+    console.log('Final Search Payload:', searchData);
     this.flightService.search(searchData);
   }
 }

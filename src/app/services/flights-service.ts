@@ -38,13 +38,47 @@ query SearchFlights($search: FlightSearchInput!) {
   }
 }
 `;
+const FLIGHT_BY_NUMBER =gql`
+query getFlight($flightNumber: String!) {
+  getFlight(flightNumber: $flightNumber) {
+    flightNumber
+    departure
+    arrival
+    duration
+    airline {
+      code
+      name
+    }
+    departureAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    arrivalAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    prices {
+      type
+      amount
+      currency
+    }
+  }
+}
+`;
 @Injectable({
   providedIn: 'root',
 })
-export class FlighstService {
+export class FlightsService {
   cities = signal<any[]>([]);
   private apollo = inject(Apollo);
   error = signal<any>(null);
+  public selectedFlightSignal = signal<any>(null);
   loadCities() {
 
     this.apollo.watchQuery<{ cities: string[] }>({
@@ -63,18 +97,19 @@ export class FlighstService {
   searchResults = signal<any[]>([]);
   isSearching = signal<boolean>(false);
 
-  search(criteria: any) {
+  search(search: any) {
     this.isSearching.set(true);
 
     this.apollo.query<any>({
       query: SEARCH_FLIGHTS,
       variables: {
-        search: criteria
+        search
       },
       fetchPolicy: 'network-only' // Ensures we always get fresh results
     }).subscribe({
       next: (result) => {
         this.searchResults.set(result.data.searchFlights);
+        console.log("resul fs",result)
         this.isSearching.set(false);
       },
       error: (err) => {
@@ -83,4 +118,29 @@ export class FlighstService {
       }
     });
   }
+  getFlightByNumber(flightNumber: string) {
+    console.log('Fetching flight with number:', flightNumber);
+    this.isSearching.set(true);
+
+    this.apollo.query<any>({
+      query: FLIGHT_BY_NUMBER,
+      variables: {
+        flightNumber: flightNumber
+      },
+      fetchPolicy: 'network-only' // Ensures we always get fresh results
+    }).subscribe({
+      next: (result) => {
+        this.selectedFlightSignal.set(result.data.getFlight);
+        console.log("resul fs",result)
+        this.isSearching.set(false);
+      },
+      error: (err) => {
+        console.error('Search failed', err);
+        this.isSearching.set(false);
+      }
+    });
+  }
+
+
+
 }

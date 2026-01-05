@@ -1,0 +1,92 @@
+<div class="main-content detail-view">
+    <div class="side-panel">
+      <div class="panel-header">
+        <button mat-button class="back-btn" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon> Back to Search
+        </button>
+        <h2>FLIGHT DETAILS</h2>
+        <p>REF: #{{ flightService.selectedFlightSignal()?.flightNumber }}</p>
+      </div>
+  
+      @if (flightService.selectedFlightSignal(); as flight) {
+        <div class="info-scroll-container">
+          <mat-card class="flight-card static-card">
+            <mat-card-header>
+              <mat-card-title>{{ flight.departureAirport.city.name }} → {{ flight.arrivalAirport.city.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="detail-row">
+                <span class="label">Airline:</span>
+                <span class="value">{{ flight.airline.name }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Departure:</span>
+                <span class="value">{{ flight.departure | date:'MMM d, HH:mm' }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Arrival:</span>
+                <span class="value">{{ flight.arrival | date:'MMM d, HH:mm' }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+  
+          <mat-card class="flight-card price-summary-card">
+            <mat-card-content>
+              <p class="price-tag">
+                <span>TOTAL FARE:</span> 
+                {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}
+              </p>
+              <button mat-flat-button color="accent" class="full-width search-button" (click)="isSidebarOpen = true">
+                PROCEED TO PAYMENT
+              </button>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      }
+    </div>
+    <div class="globe-wrapper">
+      <div #globeContainer class="globe-canvas"></div>
+    </div>
+    <div class="stage-wrapper">
+      <div class="visual-bg-overlay"></div>
+      
+      @if (isSidebarOpen) {
+        <div class="payment-overlay-container animate-in fade-in">
+          <mat-card class="payment-card">
+            <div class="payment-header">
+              <h3>SECURE CHECKOUT</h3>
+              <button mat-icon-button (click)="isSidebarOpen = false"><mat-icon>close</mat-icon></button>
+            </div>
+  
+            <div class="cc-display">
+              <div class="chip"></div>
+              <div class="card-number">•••• •••• •••• 4242</div>
+              <div class="card-holder">VALUED TRAVELER</div>
+            </div>
+  
+            <form class="payment-form">
+              <mat-form-field appearance="outline" class="full-width space-field">
+                <mat-label>Card Number</mat-label>
+                <input matInput placeholder="0000 0000 0000 0000">
+              </mat-form-field>
+  
+              <div class="form-grid">
+                <mat-form-field appearance="outline" class="space-field">
+                  <mat-label>Expiry</mat-label>
+                  <input matInput placeholder="MM/YY">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="space-field">
+                  <mat-label>CVC</mat-label>
+                  <input matInput type="password" placeholder="***">
+                </mat-form-field>
+              </div>
+  
+              <button mat-flat-button type="button" color="accent" class="full-width confirm-btn" (click)="confirmPayment()">
+                CONFIRM & BOOK NOW
+              </button>
+            </form>
+          </mat-card>
+        </div>
+      }
+    </div>
+  </div>

@@ -143,3 +143,67 @@
 .space-field{
   margin-top: 5%;
 }
+/* Container for the list */
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between each card */
+  padding: 10px;
+  background-color: #050a0f; /* Match globe background */
+}
+
+/* The Flight Card */
+.flight-card {
+  background-color: #050a0f !important; /* Force black background */
+  border: 1px solid #00bcd4 !important; /* Cyan border */
+  border-left: 4px solid #00bcd4 !important; /* Thicker left border for accent */
+  border-radius: 0 !important; /* Force sharp rectangles */
+  color: white !important;
+  transition: all 0.3s ease;
+  box-shadow: none !important; /* Remove material shadow */
+}
+
+/* Hover effect for a "glow" look */
+.flight-card:hover {
+  background-color: rgba(0, 188, 212, 0.05) !important; /* Subtle cyan tint */
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.3) !important; /* Cyan glow */
+  transform: translateX(5px); /* Slight shift on hover */
+}
+
+/* Card Title / Airline */
+mat-card-title {
+  color: #00bcd4 !important; /* Cyan text */
+  font-family: 'Courier New', Courier, monospace; /* Optional: tech font */
+  font-size: 1.1rem !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Card Content Details */
+mat-card-content p {
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+/* Price Highlight */
+.flight-card p:last-child {
+  color: #ff9800; /* Orange for price to match your globe markers */
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Loading Spinner Color */
+::ng-deep .mat-mdc-progress-spinner circle, 
+::ng-deep .mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle {
+  stroke: #00bcd4 !important;
+}
+
+/* Empty state text */
+.results-list > p {
+  color: #00bcd4;
+  text-align: center;
+  font-style: italic;
+  margin-top: 20px;
+}

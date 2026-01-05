@@ -24,7 +24,9 @@
             <mat-label>Going to...</mat-label>
             <mat-select formControlName="arrivalCity" style="color:#00bcd4">
               @for (city of flightService.cities(); track city) {
-                <mat-option [value]="city">{{ city }}</mat-option>
+                @if (city !== routeForm.get('departureCity')?.value) {
+                  <mat-option [value]="city">{{ city }}</mat-option>
+                }
               }
             </mat-select>
           </mat-form-field>
@@ -41,8 +43,12 @@
           <div class="form-grid">
             <mat-form-field appearance="outline" class="space-field">
               <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="departureDate">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <input 
+                matInput 
+                [matDatepicker]="picker" 
+                [min]="minDate" 
+                formControlName="departureDate"
+                readonly> <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             
@@ -65,14 +71,15 @@
     } @else {
       <div class="results-list">
         @for (flight of flightService.searchResults(); track flight.flightNumber) {
-          <mat-card class="flight-card">
+          <mat-card class="flight-card" (click)="viewDetails(flight.flightNumber)">
             <mat-card-header>
-              <mat-card-title>{{ flight.airlineName }} - {{ flight.flightNumber }}</mat-card-title>
-              <mat-card-subtitle>{{ flight.depCityName }} ✈ {{ flight.arrCityName }}</mat-card-subtitle>
+              <mat-card-title>{{ flight.departureAirport.city.name }} - {{ flight.arrivalAirport.city.name }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <p>Departure: {{ flight.departure | date:'short' }}</p>
-              <p>Price: {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
+              <p><strong>Departure:</strong> {{ flight.departure | date:'short' }}</p>
+              <p class="price-tag">
+                <span>Price:</span> {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}
+              </p>
             </mat-card-content>
           </mat-card>
         } @empty {
