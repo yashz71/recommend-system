@@ -1,12 +1,19 @@
-<mat-toolbar color="primary" class="neojet-toolbar">
-  <button mat-icon-button aria-label="Menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
-  
-  <span class="brand-name">Neojet</span>
+<mat-toolbar class="neojet-toolbar">
+  <span class="brand-name" (click)="onGoHome()" style="cursor: pointer;">NEOJET</span>
   
   <span class="example-spacer"></span>
-  
 
+  <div class="nav-actions">
+    <button mat-stroked-button class="nav-btn" (click)="onGoHome()">
+      <mat-icon>search</mat-icon>
+      SEARCH FLIGHTS
+    </button>
+
+    <button mat-flat-button class="recommend-btn" (click)="onGoRecommend()">
+      <mat-icon>auto_awesome</mat-icon>
+      RECOMMENDED FOR YOU
+    </button>
+  </div>
 </mat-toolbar>
+
 <router-outlet />

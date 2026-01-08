@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { UserService } from './user-service';
+import { Router } from '@angular/router';
 const GET_CITIES = gql`
   query Cities {
     cities
@@ -15,6 +16,72 @@ const BOOK_FLIGHT_MUTATION = gql`
     }
   `;
 
+const RECOMMENDED_FLIGHTS_BY_OTHERS = gql`
+query getRecommendedFlightsByOthers($userId: String!) {
+  getRecommendedFlightsByOthers(userId: $userId) {
+    flightNumber
+    departure
+    arrival
+    duration
+    airline {
+      code
+      name
+    }
+    departureAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    arrivalAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    prices {
+      type
+      amount
+      currency
+    }
+  }
+}
+`;
+const RECOMMENDED_FLIGHTS_BY_BOOKING = gql`
+query getRecommendedFlightsByBooking($userId: String!) {
+  getRecommendedFlightsByBooking(userId: $userId) {
+    flightNumber
+    departure
+    arrival
+    duration
+    airline {
+      code
+      name
+    }
+    departureAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    arrivalAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    prices {
+      type
+      amount
+      currency
+    }
+  }
+}
+`;
 const SEARCH_FLIGHTS =gql`
 query SearchFlights($search: FlightSearchInput!) {
   searchFlights(search: $search) {
@@ -89,9 +156,15 @@ export class FlightsService {
   bookIsValid= signal<boolean>(false);
   private apollo = inject(Apollo);
   private userService = inject(UserService);
+  private router = inject(Router);
 
   error = signal<any>(null);
   public selectedFlightSignal = signal<any>(null);
+  public recommendedFlightsByOthers = signal<any[]>([]);
+    public recommendedFlightsByBooking = signal<any[]>([]);
+
+  searchResults = signal<any[]>([]);
+  isSearching = signal<boolean>(false);
   loadCities() {
 
     this.apollo.watchQuery<{ cities: string[] }>({
@@ -107,8 +180,7 @@ export class FlightsService {
       }
     });
   }
-  searchResults = signal<any[]>([]);
-  isSearching = signal<boolean>(false);
+
 
   search(search: any) {
     this.isSearching.set(true);
@@ -153,6 +225,41 @@ export class FlightsService {
       }
     });
   }
+  
+  getRecommendationByBooking() {
+    const userId = this.userService.currentUser().id; // Replace with actual auth logic
+  
+    this.apollo.query<any>( {
+      query: RECOMMENDED_FLIGHTS_BY_BOOKING,
+      variables:  { userId } 
+    }).subscribe({
+      next: (result) => {
+        this.recommendedFlightsByBooking.set(result.data.getRecommendedFlightsByBooking);
+        console.log("resul recbybooking",result)
+      },
+      error: (err) => {
+        console.error('rec failed', err);
+      }
+    });
+  }
+  getRecommendationByOthers() {
+    const userId = this.userService.currentUser().id; // Replace with actual auth logic
+  
+    this.apollo.query<any>( {
+      query: RECOMMENDED_FLIGHTS_BY_OTHERS,
+      variables:  { userId }
+    }).subscribe({
+      next: (result) => {
+        this.recommendedFlightsByOthers.set(result.data.getRecommendedFlightsByOthers);
+
+        console.log("resul recbyother",result)
+      },
+      error: (err) => {
+        console.error('rec failed', err);
+      }
+    });
+  }
+
   confirmBooking(flightNumber: string) {
     const userId = this.userService.currentUser().id; // Replace with actual auth logic
   
@@ -162,6 +269,8 @@ export class FlightsService {
     }).subscribe({
       next: (result) => {
         this.bookIsValid.set(true);
+            this.router.navigate(['/recommended']);
+
         console.log("resul book",result)
       },
       error: (err) => {

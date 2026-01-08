@@ -4,8 +4,8 @@
         <button mat-button class="back-btn" (click)="goBack()">
           <mat-icon>arrow_back</mat-icon> Back to Search
         </button>
-        <h2>FLIGHT DETAILS</h2>
-        <p>REF: #{{ flightService.selectedFlightSignal()?.flightNumber }}</p>
+        <h2 style="color: #00e5ff">FLIGHT DETAILS</h2>
+        <p  style="color: #00e5ff">REF: #{{ flightService.selectedFlightSignal()?.flightNumber }}</p>
       </div>
   
       @if (flightService.selectedFlightSignal(); as flight) {
@@ -30,17 +30,21 @@
             </mat-card-content>
           </mat-card>
   
-          <mat-card class="flight-card price-summary-card">
-            <mat-card-content>
-              <p class="price-tag">
-                <span>TOTAL FARE:</span> 
-                {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}
-              </p>
-              <button mat-flat-button color="accent" class="full-width search-button" (click)="isSidebarOpen = true">
-                PROCEED TO PAYMENT
-              </button>
-            </mat-card-content>
-          </mat-card>
+         <mat-card class="flight-card price-summary-card">
+  <mat-card-content>
+    <div class="price-container">
+      <span class="price-label">TOTAL FARE:</span> 
+      <p class="price-tag main-price">
+        {{ flight.prices[0]?.amount }} <span>{{ flight.prices[0]?.currency }}</span>
+      </p>
+    </div>
+    
+    <button mat-flat-button class="full-width payment-button" (click)="isSidebarOpen = true">
+      <mat-icon>payments</mat-icon>
+      PROCEED TO PAYMENT
+    </button>
+  </mat-card-content>
+</mat-card>
         </div>
       }
     </div>

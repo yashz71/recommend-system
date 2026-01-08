@@ -59,7 +59,7 @@ export class FlightDetail implements OnInit, AfterViewInit {
       .arcDashInitialGap(() => Math.random() * 5)
       .arcDashAnimateTime(1000)
       .arcStroke(1.5)
-      .arcAltitude(0.2)
+      .arcAltitude(0.5)
       .pointColor(() => '#00bcd4')
       .pointRadius(0.8)
       .pointAltitude(0.01);         // Better for individual markers

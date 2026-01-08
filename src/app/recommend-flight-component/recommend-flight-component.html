@@ -1,1 +1,94 @@
-<p>recommend-flight-component works!</p>
+<div class="results-list">
+  <div class="panel-header">
+    <h2>FLIGHT INTELLIGENCE</h2>
+    <p>AI-driven route optimization for your profile</p>
+  </div>
+
+  @if (loading) {
+    <div class="spinner-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Analyzing travel patterns...</p>
+    </div>
+  } @else {
+    
+    <h3 class="section-divider">BASED ON YOUR HISTORY</h3>
+    @for (flight of flightsService.recommendedFlightsByBooking(); track flight.flightNumber) {
+      <mat-card class="flight-card">
+        <div class="recommendation-badge">98% MATCH — Personalized</div>
+        <mat-card-header>
+          <div mat-card-avatar class="airline-icon">
+            <mat-icon>verified_user</mat-icon>
+          </div>
+          <mat-card-title>{{ flight.airline.name }}</mat-card-title>
+          <mat-card-subtitle class="route-text">
+            {{ flight.departureAirport.code }} <mat-icon>trending_flat</mat-icon> {{ flight.arrivalAirport.code }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="flight-details-grid">
+            <div class="time-block">
+              <span class="label">FLIGHT</span>
+              <span class="value">{{ flight.flightNumber }}</span>
+            </div>
+            <div class="duration-block">
+              <span class="label">DURATION</span>
+              <span class="value">{{ flight.duration }}</span>
+            </div>
+            <div class="time-block">
+              <span class="label">TYPE</span>
+              <span class="value">{{ flight.prices[0]?.type || 'ECONOMY' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="card-footer">
+          <p class="price-tag">{{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
+          <button mat-stroked-button class="active-mode">SELECT ROUTE</button>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      <p class="empty-state">No history-based recommendations found.</p>
+    }
+
+    <h3 class="section-divider">TRENDING NEAR YOU</h3>
+    @for (flight of flightsService.recommendedFlightsByOthers(); track flight.flightNumber) {
+      <mat-card class="flight-card trending-card">
+        <div class="recommendation-badge">POPULAR CHOICE — Trending</div>
+        <mat-card-header>
+          <div mat-card-avatar class="airline-icon">
+            <mat-icon>auto_awesome</mat-icon>
+          </div>
+          <mat-card-title>{{ flight.airline.name }}</mat-card-title>
+          <mat-card-subtitle class="route-text">
+            {{ flight.departureAirport.code }} <mat-icon>trending_flat</mat-icon> {{ flight.arrivalAirport.code }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="flight-details-grid">
+            <div class="time-block">
+              <span class="label">FLIGHT</span>
+              <span class="value">{{ flight.flightNumber }}</span>
+            </div>
+            <div class="duration-block">
+              <span class="label">DURATION</span>
+              <span class="value">{{ flight.duration }}</span>
+            </div>
+            <div class="time-block">
+              <span class="label">TYPE</span>
+              <span class="value">{{ flight.prices[0]?.type || 'ECONOMY' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="card-footer">
+          <p class="price-tag">{{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
+          <button mat-stroked-button class="active-mode">SELECT ROUTE</button>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      <p class="empty-state">No community recommendations available.</p>
+    }
+  }
+</div>

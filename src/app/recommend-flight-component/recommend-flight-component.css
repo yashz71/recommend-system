@@ -1,0 +1,117 @@
+/* Container and Header */
+.results-list {
+  padding: 20px;
+  background-color: #050a0f;
+  min-height: 100vh;
+}
+
+.panel-header h2 {
+  color: #00bcd4;
+  letter-spacing: 4px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.panel-header p {
+  color: rgba(0, 188, 212, 0.6);
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+/* Flight Card Styling */
+.flight-card {
+  background-color: #0a1219 !important;
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 0 !important;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.flight-card:hover {
+  border-color: #00bcd4;
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+.trending-card {
+  border-left: 4px solid #ff9800 !important;
+}
+
+/* Grid Layout */
+.flight-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  margin: 20px 0;
+  border-top: 1px solid rgba(0, 188, 212, 0.1);
+  padding-top: 15px;
+}
+
+.label {
+  display: block;
+  font-size: 0.7rem;
+  color: #00bcd4;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+}
+
+.route-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #00bcd4 !important;
+}
+
+/* Badges and Price */
+.recommendation-badge {
+  background: rgba(0, 188, 212, 0.1);
+  color: #00bcd4;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(0, 188, 212, 0.3);
+  font-weight: bold;
+}
+
+.price-tag {
+  color: #ff9800 !important;
+  font-size: 1.5rem !important;
+  font-weight: 800;
+  font-family: 'Courier New', monospace;
+}
+
+/* Active Mode Button */
+.active-mode {
+  border-color: #00bcd4 !important;
+  color: #00bcd4 !important;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.active-mode:hover {
+  background: #00bcd4 !important;
+  color: #050a0f !important;
+}
+
+/* Loading State */
+.spinner-container {
+  margin-top: 100px;
+  color: #00bcd4;
+}
+
+.spinner-container p {
+  margin-top: 20px;
+  letter-spacing: 2px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}

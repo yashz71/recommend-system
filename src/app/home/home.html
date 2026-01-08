@@ -15,10 +15,10 @@
         <form [formGroup]="routeForm">
           <ng-template matStepLabel>Departure Origin</ng-template>
           <mat-form-field appearance="outline" class="full-width space-field">
-            <mat-label>Leaving from...</mat-label>
-            <mat-select formControlName="departureCity">
+            <mat-label style="color: #00bcd4;">Leaving from...</mat-label>
+            <mat-select formControlName="departureCity"style="color: #00bcd4;" > 
               @for (city of flightService.cities(); track city) {
-                <mat-option [value]="city">{{ city }}</mat-option>
+                <mat-option [value]="city" >{{ city }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -31,7 +31,7 @@
           <ng-template matStepLabel>Destination</ng-template>
           <mat-form-field appearance="outline" class="full-width space-field">
             <mat-label>Going to...</mat-label>
-            <mat-select formControlName="arrivalCity">
+            <mat-select formControlName="arrivalCity" style="color: #00bcd4;">
               @for (city of flightService.cities(); track city) {
                 @if (city !== routeForm.get('departureCity')?.value) {
                   <mat-option [value]="city">{{ city }}</mat-option>
@@ -63,16 +63,16 @@
               </mat-form-field>
             } @else { }-->
               <mat-form-field appearance="outline" class="space-field full-width">
-                <mat-label>Departure Date</mat-label>
-                <input matInput [matDatepicker]="onePicker" [min]="minDate" formControlName="departureDate">
+                <mat-label style="color: #00bcd4;">Departure Date</mat-label>
+                <input matInput [matDatepicker]="onePicker" [min]="minDate" formControlName="departureDate" style="color: #00bcd4;">
                 <mat-datepicker-toggle matSuffix [for]="onePicker"></mat-datepicker-toggle>
                 <mat-datepicker #onePicker></mat-datepicker>
               </mat-form-field>
             
             
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Class</mat-label>
-              <mat-select formControlName="seatClass">
+              <mat-label style="color: #00bcd4;">Class</mat-label>
+              <mat-select formControlName="seatClass" style="color: #00bcd4;">
                 <mat-option value="Economy">Economy</mat-option>
                 <mat-option value="Business">Business</mat-option>
                 <mat-option value="First">First</mat-option>

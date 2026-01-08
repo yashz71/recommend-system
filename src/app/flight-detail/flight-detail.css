@@ -14,7 +14,75 @@
     justify-content: center;
     position: relative;
   }
-  
+  /* Price Summary Card Specifics */
+.price-summary-card {
+  margin-top: 20px;
+  background-color: #050a0f !important;
+  border: 1px solid #00bcd4 !important;
+  border-top: 3px solid #ff9800 !important; /* Orange accent top to show priority */
+  border-radius: 0 !important;
+}
+
+/* Layout for Price Label and Value */
+.price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(0, 188, 212, 0.3);
+}
+
+.price-label {
+  color: #00bcd4;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+
+/* Big Orange Price */
+.main-price {
+  color: #ff9800 !important;
+  font-size: 2rem !important;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 800;
+  margin: 0 !important;
+  text-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+}
+
+.main-price span {
+  font-size: 1rem;
+  margin-left: 5px;
+  opacity: 0.8;
+}
+
+/* Proceed to Payment Button */
+.payment-button {
+  background-color: #00bcd4 !important;
+  color: #050a0f !important;
+  width: 100%;
+  height: 54px;
+  font-weight: 800 !important;
+  letter-spacing: 2px;
+  border-radius: 0 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+}
+
+.payment-button:hover {
+  background-color: #00e5ff !important; /* Slightly brighter cyan */
+  box-shadow: 0 0 25px rgba(0, 188, 212, 0.7);
+  transform: translateY(-2px);
+}
+
+.payment-button mat-icon {
+  margin-right: 10px;
+}
+
+/* Ensure card content doesn't have default padding issues */
+.price-summary-card mat-card-content {
+  padding: 24px !important;
+}
   .globe-canvas {
     width: 100%;
     height: 100%;
