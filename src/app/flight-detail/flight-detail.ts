@@ -57,10 +57,9 @@ export class FlightDetail implements OnInit, AfterViewInit {
       .arcDashLength(0.4)
       .arcDashGap(0)
       .arcDashInitialGap(() => Math.random() * 5)
-      .arcDashAnimateTime(1500)
+      .arcDashAnimateTime(1000)
       .arcStroke(1.5)
       .arcAltitude(0.2)
-      // --- Points Configuration ---
       .pointColor(() => '#00bcd4')
       .pointRadius(0.8)
       .pointAltitude(0.01);         // Better for individual markers
@@ -136,8 +135,9 @@ export class FlightDetail implements OnInit, AfterViewInit {
   }
 
   confirmPayment() {
-    // Dummy logic for payment processing
     console.log('Processing payment for flight:', this.flightNumber);
-    this.closeSidebar();
+    this.flightService.confirmBooking(this.flightNumber);
+    this.router.navigate(['/recommended']);
+
   }
 }

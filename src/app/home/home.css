@@ -12,7 +12,17 @@
   background-color: #050a0f; /* Match globe background */
   overflow: hidden;
 }
-
+.active-mode {
+  background-color: #00bcd4 !important;
+  color: #000 !important;
+  border-color: #00bcd4 !important;
+}
+ 
+button[mat-stroked-button] {
+  color: #00bcd4;
+  border-color: rgba(0, 188, 212, 0.5);
+  font-weight: bold;
+}
 /* Sidebar Search Panel */
 .search-panel {
   flex: 0 0 450px;

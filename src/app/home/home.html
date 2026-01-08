@@ -1,5 +1,14 @@
 <div class="main-content">
   <div class="search-panel">
+    <!-- <div class="flex gap-2 mb-4">
+      <button mat-stroked-button 
+              [class.active-mode]="roundTrip()" 
+              (click)="onRoundTrip()">ROUND TRIP</button>
+      <button mat-stroked-button 
+              [class.active-mode]="oneWay()" 
+              (click)="onOneWay()">ONE WAY</button>
+    </div> -->
+
     <mat-stepper orientation="vertical" (selectionChange)="handleStepChange($event)" #stepper>
       
       <mat-step [stepControl]="routeForm">
@@ -7,7 +16,7 @@
           <ng-template matStepLabel>Departure Origin</ng-template>
           <mat-form-field appearance="outline" class="full-width space-field">
             <mat-label>Leaving from...</mat-label>
-            <mat-select formControlName="departureCity" style="color:#00bcd4">
+            <mat-select formControlName="departureCity">
               @for (city of flightService.cities(); track city) {
                 <mat-option [value]="city">{{ city }}</mat-option>
               }
@@ -22,7 +31,7 @@
           <ng-template matStepLabel>Destination</ng-template>
           <mat-form-field appearance="outline" class="full-width space-field">
             <mat-label>Going to...</mat-label>
-            <mat-select formControlName="arrivalCity" style="color:#00bcd4">
+            <mat-select formControlName="arrivalCity">
               @for (city of flightService.cities(); track city) {
                 @if (city !== routeForm.get('departureCity')?.value) {
                   <mat-option [value]="city">{{ city }}</mat-option>
@@ -32,7 +41,7 @@
           </mat-form-field>
           <div class="actions">
             <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext type="button">Next: Details</button>
+            <button mat-button matStepperNext type="button">Next: Dates</button>
           </div>
         </form>
       </mat-step>
@@ -40,32 +49,44 @@
       <mat-step [stepControl]="detailsForm">
         <form [formGroup]="detailsForm">
           <ng-template matStepLabel>Preferences</ng-template>
+          
           <div class="form-grid">
-            <mat-form-field appearance="outline" class="space-field">
-              <mat-label>Date</mat-label>
-              <input 
-                matInput 
-                [matDatepicker]="picker" 
-                [min]="minDate" 
-                formControlName="departureDate"
-                readonly> <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <!-- @if (roundTrip()) {
+              <mat-form-field appearance="outline" class="space-field full-width">
+                <mat-label>Departure - Return</mat-label>
+                <mat-date-range-input [formGroup]="dateRangeGroup" [rangePicker]="picker" [min]="minDate">
+                  <input matStartDate formControlName="start" placeholder="Start date">
+                  <input matEndDate formControlName="end" placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            } @else { }-->
+              <mat-form-field appearance="outline" class="space-field full-width">
+                <mat-label>Departure Date</mat-label>
+                <input matInput [matDatepicker]="onePicker" [min]="minDate" formControlName="departureDate">
+                <mat-datepicker-toggle matSuffix [for]="onePicker"></mat-datepicker-toggle>
+                <mat-datepicker #onePicker></mat-datepicker>
+              </mat-form-field>
             
-            <mat-form-field appearance="outline" class="space-field">
+            
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>Class</mat-label>
-              <mat-select formControlName="seatClass" style="color:#00bcd4">
+              <mat-select formControlName="seatClass">
                 <mat-option value="Economy">Economy</mat-option>
                 <mat-option value="Business">Business</mat-option>
                 <mat-option value="First">First</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <button mat-flat-button color="accent" class="full-width" (click)="onSearch()">Confirm & Search</button>
+      
+          <button mat-flat-button color="accent" class="full-width search-button" (click)="onSearch()">
+            Search Flights
+          </button>
         </form>
       </mat-step>
-
     </mat-stepper>
+
     @if (flightService.isSearching()) {
       <mat-spinner></mat-spinner>
     } @else {

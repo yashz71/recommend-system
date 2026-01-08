@@ -44,9 +44,11 @@
         </div>
       }
     </div>
+    @if (!isSidebarOpen) {
     <div class="globe-wrapper">
       <div #globeContainer class="globe-canvas"></div>
     </div>
+  }
     <div class="stage-wrapper">
       <div class="visual-bg-overlay"></div>
       

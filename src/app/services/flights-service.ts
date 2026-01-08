@@ -1,10 +1,20 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
+import { UserService } from './user-service';
 const GET_CITIES = gql`
   query Cities {
     cities
   }
 `;
+const BOOK_FLIGHT_MUTATION = gql`
+    mutation bookFlight($flightNumber: String!, $userId: String!) {
+      bookFlight(flightNumber: $flightNumber, userId: $userId) {
+        success
+        message
+      }
+    }
+  `;
+
 const SEARCH_FLIGHTS =gql`
 query SearchFlights($search: FlightSearchInput!) {
   searchFlights(search: $search) {
@@ -76,7 +86,10 @@ query getFlight($flightNumber: String!) {
 })
 export class FlightsService {
   cities = signal<any[]>([]);
+  bookIsValid= signal<boolean>(false);
   private apollo = inject(Apollo);
+  private userService = inject(UserService);
+
   error = signal<any>(null);
   public selectedFlightSignal = signal<any>(null);
   loadCities() {
@@ -140,7 +153,23 @@ export class FlightsService {
       }
     });
   }
-
+  confirmBooking(flightNumber: string) {
+    const userId = this.userService.currentUser().id; // Replace with actual auth logic
+  
+    this.apollo.mutate<any>( {
+      mutation: BOOK_FLIGHT_MUTATION,
+      variables: { flightNumber, userId }
+    }).subscribe({
+      next: (result) => {
+        this.bookIsValid.set(true);
+        console.log("resul book",result)
+      },
+      error: (err) => {
+        console.error('book failed', err);
+        this.bookIsValid.set(false);
+      }
+    });
+  }
 
 
 }

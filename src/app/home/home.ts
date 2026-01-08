@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, OnInit,inject  } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnInit,inject,signal  } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule,MatStepper } from '@angular/material/stepper';
 import Globe, { GlobeInstance } from 'globe.gl';
 import { FlightsService } from '../services/flights-service';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
@@ -44,12 +44,14 @@ import { Router } from '@angular/router';
 })
 export class Home implements AfterViewInit ,OnInit {
   public router = inject(Router);
-
+  @ViewChild('stepper') stepper!: MatStepper; // Add this to reset stepper on toggle
 
   public flightService = inject(FlightsService);
   ngOnInit(){
   this.flightService.loadCities();
   }
+  oneWay = signal(true);
+roundTrip=signal(false);
   minDate: Date = new Date();
   @ViewChild('globeContainer') globeContainer!: ElementRef;
   private world!: GlobeInstance;
@@ -66,10 +68,18 @@ export class Home implements AfterViewInit ,OnInit {
       arrivalCity: ['']
     });
     this.detailsForm = this.fb.group({
-      departureDate: [null],
+      // Keep both possible date formats in the same form to avoid errors
+      dateRange: this.fb.group({
+        start: [null],
+        end: [null]
+      }),
+      departureDate: [null], // For One-Way
       seatClass: ['Economy'],
       maxPrice: [null]
     });
+  }
+  get dateRangeGroup(): FormGroup {
+    return this.detailsForm.get('dateRange') as FormGroup;
   }
   viewDetails(flightNumber: string) {
     // Navigate to /flight/FL123
@@ -83,7 +93,7 @@ const globeInitializer = Globe as any;
       .backgroundColor('rgba(0,0,0,0)')
       .showAtmosphere(true)
       .atmosphereColor('#00bcd4')
-      .pointColor(() => '#ff9800') 
+      .pointColor(() => '#00bcd4') 
       .pointRadius(.8)            // Larger, more visible point
       .pointAltitude(0.35)         // Slightly raised above surface
       .pointsMerge(true);         // Better for individual markers
@@ -97,6 +107,17 @@ resize() {
       this.world.width(container.clientWidth);
       this.world.height(container.clientHeight);
     }
+  }
+  onRoundTrip() {
+    this.roundTrip.set(true);
+    this.oneWay.set(false);
+    this.stepper.reset(); // Clear progress when switching modes
+  }
+
+  onOneWay() {
+    this.roundTrip.set(false);
+    this.oneWay.set(true);
+    this.stepper.reset();
   }
   // Handle the step change logic
   handleStepChange(event: any) {
@@ -149,32 +170,54 @@ resize() {
       }
     });
   }
-  onSearch() {
-    const rawDate = this.detailsForm.value.departureDate;
-    let formattedDate = undefined;
-  
+  private formatDate(date: Date | null): string | undefined {
+    if (!date) return undefined;
+    const d = new Date(date);
+    d.setDate(d.getDate());
 
-  if (rawDate) {
-    const d = new Date(rawDate);
-  
-  // 2. Set time to noon to prevent timezone shifts
-  d.setDate(d.getDate());
-    
-  // 2. Set to noon to stay safely within the date boundary during UTC conversion
-  d.setHours(12, 0, 0, 0); 
-  
-  // 3. Convert to ISO and grab only the YYYY-MM-DD part
-  formattedDate = d.toISOString().split('T')[0];
+    d.setHours(12, 0, 0, 0); 
+    return d.toISOString().split('T')[0];
   }
-  
-    const searchData = {
-      departureCity: this.routeForm.value.departureCity,
-      arrivalCity: this.routeForm.value.arrivalCity, 
-      departureDate: formattedDate, // Now sends exactly "YYYY-MM-DD"
-      seatClass: this.detailsForm.value.seatClass
-    };
-  
-    console.log('Final Search Payload:', searchData);
-    this.flightService.search(searchData);
+  onSearch() {
+    const range = this.detailsForm.value.dateRange;
+    // const rawDate = this.detailsForm.value.departureDate;
+    // let formattedDate = undefined;
+
+    // if (rawDate) {
+    //   const d = new Date(rawDate);
+    //   // 2. Set time to noon to prevent timezone shifts
+    //   d.setDate(d.getDate());
+    //   // 2. Set to noon to stay safely within the date boundary during UTC conversion
+    //   d.setHours(12, 0, 0, 0);
+    //   // 3. Convert to ISO and grab only the YYYY-MM-DD part
+    //   formattedDate = d.toISOString().split('T')[0];
+    //   }
+    const isRT = this.roundTrip();
+    if(isRT){
+      const searchData = {
+        departureCity: this.routeForm.value.departureCity,
+        arrivalCity: this.routeForm.value.arrivalCity, 
+        departureDate: this.formatDate(range.start),
+        returnDate: this.formatDate(range.end), 
+        seatClass: this.detailsForm.value.seatClass
+      };
+    
+      console.log('Final Search Payload:', searchData);
+      this.flightService.search(searchData);
+    }
+    
+    else{
+      const searchData = {
+        departureCity: this.routeForm.value.departureCity,
+        arrivalCity: this.routeForm.value.arrivalCity, 
+        departureDate: this.formatDate(this.detailsForm.value.departureDate),
+        seatClass: this.detailsForm.value.seatClass
+      };
+    
+      console.log('Final Search Payload:', searchData);
+      this.flightService.search(searchData);
+    }
+    
   }
 }
+
