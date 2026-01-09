@@ -1,0 +1,80 @@
+.admin-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #050a0f;
+    min-height: calc(100vh - 64px);
+  }
+  
+  .admin-container {
+    max-width: 1000px;
+    width: 90%;
+  }
+  
+  .admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 40px;
+  }
+  
+  /* The Unified Admin Card Design */
+  .admin-card {
+    background-color: #050a0f !important;
+    border: 1px solid rgba(0, 188, 212, 0.3) !important;
+    border-radius: 0 !important;
+    color: white !important;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+  }
+  
+  .admin-card:hover {
+    border-color: #00bcd4 !important;
+    box-shadow: 0 0 25px rgba(0, 188, 212, 0.2) !important;
+    transform: translateY(-5px);
+  }
+  
+  .card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: #00bcd4;
+  }
+  
+  .flight-mod .card-accent {
+    background: #ff9800; /* Change accent to orange for the second card */
+  }
+  
+  .admin-icon-box {
+    background: rgba(0, 188, 212, 0.1);
+    color: #00bcd4;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .flight-mod .admin-icon-box {
+    color: #ff9800;
+    background: rgba(255, 152, 0, 0.1);
+  }
+  
+  mat-card-title {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    font-weight: 900 !important;
+  }
+  
+  mat-card-subtitle {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+  
+  .text-orange {
+    color: #ff9800;
+    font-weight: bold;
+  }

@@ -4,6 +4,12 @@
   <span class="example-spacer"></span>
 
   <div class="nav-actions">
+    @if (userService.currentUser()?.roles?.includes('ADMIN')) {
+      <button mat-flat-button color="warn" class="nav-btn" (click)="adminPage()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        ADMIN DASHBOARD
+      </button>
+    }
     <button mat-stroked-button class="nav-btn" (click)="onGoHome()">
       <mat-icon>search</mat-icon>
       SEARCH FLIGHTS

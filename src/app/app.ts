@@ -13,7 +13,7 @@ import { UserService } from './services/user-service';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
-  private userService = inject(UserService);
+  public userService = inject(UserService);
   private router = inject(Router);
   protected readonly title = signal('NEOJET');
 
@@ -28,7 +28,9 @@ export class App implements OnInit {
       }
     });
   }
-
+adminPage(){
+  this.router.navigate(['/admin/home']);
+}
   onGoHome() {
     this.router.navigate(['/home']);
   }

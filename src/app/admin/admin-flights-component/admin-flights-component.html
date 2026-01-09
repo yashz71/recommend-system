@@ -1,0 +1,145 @@
+<div class="admin-flights-page">
+    <div class="action-bar">
+      <div class="brand-section">
+        <h2 class="text-cyan">FLIGHT INVENTORY</h2>
+        <p class="subtitle">System Modification Mode</p>
+      </div>
+      <div class="button-group">
+        <button mat-stroked-button class="admin-btn" (click)="toggleSearch()">
+          <mat-icon>{{ showSearch ? 'close' : 'search' }}</mat-icon> 
+          {{ showSearch ? 'CANCEL SEARCH' : 'FIND FLIGHT' }}
+        </button>
+        <button mat-flat-button class="add-btn" (click)="onAddFlight()">
+          <mat-icon>add</mat-icon> ADD NEW FLIGHT
+        </button>
+      </div>
+    </div>
+  
+    @if (showSearch) {
+      <div class="search-drawer">
+        <mat-stepper orientation="vertical" #stepper class="admin-stepper">
+          <mat-step [stepControl]="routeForm">
+            <form [formGroup]="routeForm">
+              <ng-template matStepLabel>Departure Origin</ng-template>
+              <mat-form-field appearance="outline" class="full-width space-field">
+                <mat-label>Leaving from...</mat-label>
+                <mat-select formControlName="departureCity">
+                  @for (city of flightService.cities(); track city) {
+                    <mat-option [value]="city">{{ city }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <button mat-button matStepperNext type="button" class="text-cyan">Next: Arrival</button>
+            </form>
+          </mat-step>
+  
+          <mat-step [stepControl]="routeForm">
+            <form [formGroup]="routeForm">
+              <ng-template matStepLabel>Destination</ng-template>
+              <mat-form-field appearance="outline" class="full-width space-field">
+                <mat-label>Going to...</mat-label>
+                <mat-select formControlName="arrivalCity">
+                  @for (city of flightService.cities(); track city) {
+                    @if (city !== routeForm.get('departureCity')?.value) {
+                      <mat-option [value]="city">{{ city }}</mat-option>
+                    }
+                  }
+                </mat-select>
+              </mat-form-field>
+              <div class="actions">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext type="button" class="text-cyan">Next: Dates</button>
+              </div>
+            </form>
+          </mat-step>
+  
+          <mat-step [stepControl]="detailsForm">
+            <form [formGroup]="detailsForm">
+              <ng-template matStepLabel>Preferences</ng-template>
+              <div class="form-grid">
+                <mat-form-field appearance="outline" class="space-field full-width">
+                  <mat-label>Departure Date</mat-label>
+                  <input matInput [matDatepicker]="onePicker" formControlName="departureDate">
+                  <mat-datepicker-toggle matSuffix [for]="onePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #onePicker></mat-datepicker>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Class</mat-label>
+                  <mat-select formControlName="seatClass">
+                    <mat-option value="Economy">Economy</mat-option>
+                    <mat-option value="Business">Business</mat-option>
+                    <mat-option value="First">First</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <button mat-flat-button class="search-execute-btn" (click)="onSearch()">
+                SEARCH DATABASE
+              </button>
+            </form>
+          </mat-step>
+        </mat-stepper>
+      </div>
+      <div class="admin-grid">
+        @for (flight of flightService.searchResults(); track flight.flightNumber) {
+          <mat-card class="admin-flight-card">
+            <div class="card-status-bar"></div>
+
+            <mat-card-header>
+              <mat-card-title>{{ flight.departureAirport.city.name }} - {{ flight.arrivalAirport.city.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="info-row">
+                  <span class="label">DATE:</span>
+                  <span class="value">{{ flight.departure | date:'shortDate' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">TIME:</span>
+                  <span class="value">{{ flight.departure | date:'HH:mm' }}</span>
+                </div>
+              </mat-card-content>
+              <mat-card-actions class="card-footer">
+                <button mat-icon-button class="edit-btn" (click)="onEdit(flight)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="delete-btn" (click)="onDelete(flight.flightNumber)">
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+        } @empty {
+          <p>No flights found for these criteria.</p>
+        }
+      </div>
+    }
+  <div></div>
+    <div class="admin-grid">
+      @for (flight of  flightService.allFlights(); track flight.flightNumber) {
+        <mat-card class="admin-flight-card">
+          <div class="card-status-bar"></div>
+          <mat-card-header>
+            <mat-card-title>{{ flight.flightNumber }}</mat-card-title>
+            <mat-card-subtitle>{{ flight.departureAirport.city.name }} → {{ flight.arrivalAirport.city.name }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="info-row">
+              <span class="label">DATE:</span>
+              <span class="value">{{ flight.departure | date:'shortDate' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">TIME:</span>
+              <span class="value">{{ flight.departure | date:'HH:mm' }}</span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="card-footer">
+            <button mat-icon-button class="edit-btn" (click)="onEdit(flight)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="delete-btn" (click)="onDelete(flight.flightNumber)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  </div>

@@ -7,6 +7,40 @@ const GET_CITIES = gql`
     cities
   }
 `;
+const GET_ALL_FLIGHTS= gql`
+query getFlights {
+  getFlights {
+  flightNumber
+  departure
+  arrival
+  duration
+  airline {
+    code
+    name
+  }
+  departureAirport {
+    code
+    city {
+      name
+      country
+    }
+  }
+  arrivalAirport {
+    code
+    city {
+      name
+      country
+    }
+  }
+  prices {
+    type
+    amount
+    currency
+  }
+}
+}
+
+`;
 const BOOK_FLIGHT_MUTATION = gql`
     mutation bookFlight($flightNumber: String!, $userId: String!) {
       bookFlight(flightNumber: $flightNumber, userId: $userId) {
@@ -157,7 +191,7 @@ export class FlightsService {
   private apollo = inject(Apollo);
   private userService = inject(UserService);
   private router = inject(Router);
-
+public allFlights= signal<any[]>([]);
   error = signal<any>(null);
   public selectedFlightSignal = signal<any>(null);
   public recommendedFlightsByOthers = signal<any[]>([]);
@@ -203,6 +237,22 @@ export class FlightsService {
       }
     });
   }
+  getAllFlights() {
+
+    this.apollo.query<any>({
+      query: GET_ALL_FLIGHTS,
+      fetchPolicy: 'network-only' // Ensures we always get fresh results
+    }).subscribe({
+      next: (result) => {
+        this.allFlights.set(result.data.getFlights);
+      },
+      error: (err) => {
+        console.error('fetch failed', err);
+      }
+    });
+  }
+  
+
   getFlightByNumber(flightNumber: string) {
     console.log('Fetching flight with number:', flightNumber);
     this.isSearching.set(true);

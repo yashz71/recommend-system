@@ -3,10 +3,18 @@ import { Home } from './home/home';
 import { Login } from './login/login';
 import { Register } from './register/register';
 import { authGuard } from './guards/auth-guard';
+import { adminGuard } from './guards/admin-guard';
 import { FlightDetail } from './flight-detail/flight-detail';
 import { RecommendFlightComponent } from './recommend-flight-component/recommend-flight-component';
+import { AdminHomeComponent } from './admin/admin-home-component/admin-home-component';
+import { AdminUsersComponent } from './admin/admin-users-component/admin-users-component';
+import { AdminFlightsComponent } from './admin/admin-flights-component/admin-flights-component';
 export const routes: Routes = [
   { path: 'home', component: Home,canActivate: [authGuard] },
+  { path: 'admin/home', component: AdminHomeComponent,canActivate: [adminGuard] },
+  { path: 'admin/home/flights', component: AdminFlightsComponent,canActivate: [adminGuard] },
+  { path: 'admin/home/users', component: AdminUsersComponent,canActivate: [adminGuard] },
+
   { path: 'Flight/:flightNumber', component: FlightDetail,canActivate: [authGuard] },
   { path: 'recommended', component: RecommendFlightComponent,canActivate: [authGuard] },
   { path: '', component: Home,canActivate: [authGuard] },

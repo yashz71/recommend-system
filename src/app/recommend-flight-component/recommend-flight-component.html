@@ -11,17 +11,17 @@
     </div>
   } @else {
     
-    <h3 class="section-divider">BASED ON YOUR HISTORY</h3>
+    <h3 class="section-divider" style="color:aliceblue">BASED ON YOUR PREVIOUS BOOKING</h3>
     @for (flight of flightsService.recommendedFlightsByBooking(); track flight.flightNumber) {
       <mat-card class="flight-card">
         <div class="recommendation-badge">98% MATCH — Personalized</div>
         <mat-card-header>
           <div mat-card-avatar class="airline-icon">
-            <mat-icon>verified_user</mat-icon>
+            <mat-icon style="color:aliceblue">verified_user</mat-icon>
           </div>
-          <mat-card-title>{{ flight.airline.name }}</mat-card-title>
+          <mat-card-title style="color:aliceblue">{{ flight.airline.name }}</mat-card-title>
           <mat-card-subtitle class="route-text">
-            {{ flight.departureAirport.code }} <mat-icon>trending_flat</mat-icon> {{ flight.arrivalAirport.code }}
+            {{ flight.departureAirport.city.name }} <mat-icon>trending_flat</mat-icon> {{ flight.arrivalAirport.city.name}}
           </mat-card-subtitle>
         </mat-card-header>
 
@@ -44,22 +44,22 @@
 
         <mat-card-actions class="card-footer">
           <p class="price-tag">{{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
-          <button mat-stroked-button class="active-mode">SELECT ROUTE</button>
+          <button mat-stroked-button class="active-mode" (click)="viewDetails(flight.flightNumber)">SELECT ROUTE</button>
         </mat-card-actions>
       </mat-card>
     } @empty {
       <p class="empty-state">No history-based recommendations found.</p>
     }
 
-    <h3 class="section-divider">TRENDING NEAR YOU</h3>
+    <h3 class="section-divider"  style="color:aliceblue">TRENDING</h3>
     @for (flight of flightsService.recommendedFlightsByOthers(); track flight.flightNumber) {
       <mat-card class="flight-card trending-card">
-        <div class="recommendation-badge">POPULAR CHOICE — Trending</div>
+        <div class="recommendation-badge"  style="color:aliceblue">POPULAR CHOICE — Trending</div>
         <mat-card-header>
           <div mat-card-avatar class="airline-icon">
-            <mat-icon>auto_awesome</mat-icon>
+            <mat-icon  style="color:aliceblue">auto_awesome</mat-icon>
           </div>
-          <mat-card-title>{{ flight.airline.name }}</mat-card-title>
+          <mat-card-title  style="color:aliceblue">{{ flight.airline.name }}</mat-card-title>
           <mat-card-subtitle class="route-text">
             {{ flight.departureAirport.code }} <mat-icon>trending_flat</mat-icon> {{ flight.arrivalAirport.code }}
           </mat-card-subtitle>
@@ -84,7 +84,7 @@
 
         <mat-card-actions class="card-footer">
           <p class="price-tag">{{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}</p>
-          <button mat-stroked-button class="active-mode">SELECT ROUTE</button>
+          <button mat-stroked-button class="active-mode" (click)="viewDetails(flight.flightNumber)">SELECT ROUTE</button>
         </mat-card-actions>
       </mat-card>
     } @empty {
