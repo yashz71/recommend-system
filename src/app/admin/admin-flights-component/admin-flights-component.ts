@@ -2,9 +2,9 @@
 import { Component, OnInit, signal, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { FlightsService } from '../../services/flights-service'; // Adjust path based on your structure
-import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -41,6 +41,7 @@ export class AdminFlightsComponent implements OnInit {
   showSearch = false;
   routeForm: FormGroup;
   detailsForm: FormGroup;
+  public router = inject(Router);
 
   constructor( private fb: FormBuilder) {
     this.routeForm = this.fb.group({
@@ -68,6 +69,7 @@ export class AdminFlightsComponent implements OnInit {
 
   onDelete(flightNumber: string) {
     if (confirm(`Delete flight ${flightNumber} permanently?`)) {
+      this.flightService.deleteFlight(flightNumber);
     }
   }
 
@@ -76,7 +78,7 @@ export class AdminFlightsComponent implements OnInit {
   }
 
   onAddFlight() {
-    // Open a dialog to create a new flight
+this.router.navigate(['admin/home/add-flight']);
   }
   private formatDate(date: Date | null): string | undefined {
     if (!date) return undefined;

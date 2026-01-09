@@ -2,6 +2,27 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { UserService } from './user-service';
 import { Router } from '@angular/router';
+const GET_FLIGHT_METADATA = gql`
+  query GetFlightMetadata {
+    getFlightMetadata {
+      airlines {
+        code
+        name
+      }
+      airports {
+        code
+        name
+      }
+    }
+  }
+`;
+const DELETE_FLIGHT = gql`
+mutation deleteFlight($flightNumber: String!){
+  deleteFlight(flightNumber: $flightNumber)
+
+  
+}
+`;
 const GET_CITIES = gql`
   query Cities {
     cities
@@ -196,9 +217,48 @@ public allFlights= signal<any[]>([]);
   public selectedFlightSignal = signal<any>(null);
   public recommendedFlightsByOthers = signal<any[]>([]);
     public recommendedFlightsByBooking = signal<any[]>([]);
-
+public metadata = signal<any>(null)
   searchResults = signal<any[]>([]);
   isSearching = signal<boolean>(false);
+  deleteFlight(flightNumber: String){
+    
+    this.apollo.mutate<any>({
+      mutation: DELETE_FLIGHT,
+      variables: {
+        flightNumber: flightNumber
+      }
+    }).subscribe({
+      next: (result) => {
+        if (result.data.deleteFlight) {
+          // 3. Update the UI Signal locally so the card disappears
+          this.allFlights.update((flights: any[]) => 
+            flights.filter(f => f.flightNumber !== flightNumber)
+          );
+          console.log('Flight deleted successfully from Neo4j');
+        }
+      },
+      error: (error) => {
+        console.error('Delete failed', error);
+        alert('Error: You might not have the permissions to delete flights.');
+      }
+    });
+  
+  }
+  getFlightMetaData(){
+    this.apollo.watchQuery<any>({
+      query: GET_FLIGHT_METADATA,
+    }).valueChanges.subscribe({
+      next: (result) => {
+        if (result.data && result.data.getFlightMetadata) {
+          this.metadata.set(result.data.getFlightMetadata);
+        }
+      },
+      error: (err: any) => {
+        console.error("Metadata Load Error:", err);
+        this.error.set(err.message || 'Failed to load flight metadata');
+      }
+    });
+  }
   loadCities() {
 
     this.apollo.watchQuery<{ cities: string[] }>({

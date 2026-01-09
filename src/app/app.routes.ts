@@ -9,11 +9,13 @@ import { RecommendFlightComponent } from './recommend-flight-component/recommend
 import { AdminHomeComponent } from './admin/admin-home-component/admin-home-component';
 import { AdminUsersComponent } from './admin/admin-users-component/admin-users-component';
 import { AdminFlightsComponent } from './admin/admin-flights-component/admin-flights-component';
+import { AddFlightComponent } from './admin/add-flight-component/add-flight-component';
 export const routes: Routes = [
   { path: 'home', component: Home,canActivate: [authGuard] },
   { path: 'admin/home', component: AdminHomeComponent,canActivate: [adminGuard] },
   { path: 'admin/home/flights', component: AdminFlightsComponent,canActivate: [adminGuard] },
   { path: 'admin/home/users', component: AdminUsersComponent,canActivate: [adminGuard] },
+  { path: 'admin/home/add-flight', component: AddFlightComponent,canActivate: [adminGuard] },
 
   { path: 'Flight/:flightNumber', component: FlightDetail,canActivate: [authGuard] },
   { path: 'recommended', component: RecommendFlightComponent,canActivate: [authGuard] },
