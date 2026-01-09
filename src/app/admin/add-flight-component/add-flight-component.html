@@ -14,39 +14,39 @@
         <mat-form-field appearance="outline" class="cyber-input">
           <mat-label>AIRLINE CARRIER</mat-label>
           <mat-select formControlName="airlineCode">
-            @for (airline of this.flightService.metadata()?.airlines; track airline.code) {
+            @for (airline of flightService.metadata()?.airlines; track airline.code) {
               <mat-option [value]="airline.code">{{ airline.name }} ({{ airline.code }})</mat-option>
             }
           </mat-select>
         </mat-form-field>
       </div>
   
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="cyber-input">
-          <mat-label>ORIGIN AIRPORT</mat-label>
-          <mat-select formControlName="depAirportCode">
-            @for (port of metadata()?.airports; track port.code) {
-              <mat-option [value]="port.code">{{ port.name }} [{{ port.code }}]</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="cyber-input">
-          <mat-label>DESTINATION AIRPORT</mat-label>
-          <mat-select formControlName="arrAirportCode">
-            @for (port of this.flightService.metadata()?.airports; track port.code) {
-              @if (port.code !== flightForm.get('depAirportCode')?.value) {
-                <mat-option [value]="port.code">{{ port.name }} [{{ port.code }}]</mat-option>
-              }
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
+     <div class="form-row">
+  <mat-form-field appearance="outline" class="cyber-input">
+    <mat-label>ORIGIN AIRPORT</mat-label>
+    <mat-select formControlName="depAirportCode">
+      @for (port of flightService.metadata()?.airports; track port.code) {
+        <mat-option [value]="port.code">{{ port.city }} [{{ port.code }}]</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="cyber-input">
+    <mat-label>DESTINATION AIRPORT</mat-label>
+    <mat-select formControlName="arrAirportCode">
+      @for (port of flightService.metadata()?.airports; track port.code) {
+        @if (port.code !== flightForm.get('depAirportCode')?.value) {
+          <mat-option [value]="port.code">{{ port.city }} [{{ port.code }}]</mat-option>
+        }
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
   
       <div class="form-row">
         <mat-form-field appearance="outline" class="cyber-input">
           <mat-label>DEPARTURE ISO</mat-label>
-          <input matInput [matDatepicker]="dp" formControlName="departure">
+          <input matInput [matDatepicker]="dp" formControlName="departure"[min]="minDate">
           <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
           <mat-datepicker #dp></mat-datepicker>
         </mat-form-field>

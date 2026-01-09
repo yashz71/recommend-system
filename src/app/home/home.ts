@@ -88,8 +88,11 @@ roundTrip=signal(false);
 
  ngAfterViewInit() {
 const globeInitializer = Globe as any;
+const img = new Image();
+  img.crossOrigin = 'Anonymous';
+  img.src = 'https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg';
     this.world = globeInitializer()(this.globeContainer.nativeElement)
-      .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+      .globeImageUrl(img.src)
       .backgroundColor('rgba(0,0,0,0)')
       .showAtmosphere(true)
       .atmosphereColor('#00bcd4')

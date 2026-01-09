@@ -3,7 +3,7 @@ import { Apollo, gql } from 'apollo-angular';
 import { UserService } from './user-service';
 import { Router } from '@angular/router';
 const GET_FLIGHT_METADATA = gql`
-  query GetFlightMetadata {
+ query GetFlightMetadata {
     getFlightMetadata {
       airlines {
         code
@@ -11,7 +11,7 @@ const GET_FLIGHT_METADATA = gql`
       }
       airports {
         code
-        name
+        city
       }
     }
   }
@@ -22,6 +22,13 @@ mutation deleteFlight($flightNumber: String!){
 
   
 }
+`;
+const CREATE_FLIGHT = gql`
+  mutation CreateFlight($input: CreateFlightInput!) {
+    createFlight(input: $input) {
+      flightNumber
+    }
+  }
 `;
 const GET_CITIES = gql`
   query Cities {
@@ -203,6 +210,20 @@ query getFlight($flightNumber: String!) {
   }
 }
 `;
+export interface Airline {
+  code: string;
+  name: string;
+}
+
+export interface Airport {
+  code: string;
+  city: string;
+}
+
+export interface FlightMetadata {
+  airlines: Airline[];
+  airports: Airport[];
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -217,7 +238,7 @@ public allFlights= signal<any[]>([]);
   public selectedFlightSignal = signal<any>(null);
   public recommendedFlightsByOthers = signal<any[]>([]);
     public recommendedFlightsByBooking = signal<any[]>([]);
-public metadata = signal<any>(null)
+public metadata = signal<FlightMetadata | null>(null);
   searchResults = signal<any[]>([]);
   isSearching = signal<boolean>(false);
   deleteFlight(flightNumber: String){
@@ -249,16 +270,44 @@ public metadata = signal<any>(null)
       query: GET_FLIGHT_METADATA,
     }).valueChanges.subscribe({
       next: (result) => {
-        if (result.data && result.data.getFlightMetadata) {
-          this.metadata.set(result.data.getFlightMetadata);
-        }
+          console.log("Metadata test :",result);
+
+        if (result.data?.getFlightMetadata) {
+        this.metadata.set(result.data.getFlightMetadata);
+        
+        console.log("Signal updated with:", this.metadata());
+      }
       },
       error: (err: any) => {
+                  console.log("Metadata test :",err);
+
         console.error("Metadata Load Error:", err);
         this.error.set(err.message || 'Failed to load flight metadata');
       }
     });
   }
+  addFlight(input: any) {
+  return this.apollo.mutate<any>({
+    mutation: CREATE_FLIGHT,
+    variables: {
+      input
+    }
+  }).subscribe({
+    next: (result) => {
+      const newFlight = result.data.createFlight;
+      
+      // Update the signal so the list of flights updates in real-time
+      this.allFlights.update(flights => [...flights, newFlight]);
+      
+      console.log('Flight created successfully:', newFlight);
+      this.router.navigate(['/flights']); // Redirect after success
+    },
+    error: (err) => {
+      console.error('Error creating flight:', err);
+      // You can set an error signal here to show a message in the UI
+    }
+  });
+}
   loadCities() {
 
     this.apollo.watchQuery<{ cities: string[] }>({

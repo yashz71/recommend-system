@@ -9,11 +9,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FlightsService } from '../../services/flights-service';
+import { provideNativeDateAdapter } from '@angular/material/core'; // 1. Add this import
 @Component({
   selector: 'app-add-flight-component',
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, 
     MatInputModule, MatSelectModule, MatDatepickerModule, 
     MatButtonModule, MatIconModule],
+    providers: [provideNativeDateAdapter()], // 2. Add this provider
   templateUrl: './add-flight-component.html',
   styleUrl: './add-flight-component.css',
 })
@@ -25,6 +27,7 @@ export class AddFlightComponent implements OnInit {
   flightForm: FormGroup;
   metadata = signal<any>(null);
   loading = signal(false);
+  minDate: Date = new Date();
 
   constructor() {
     this.flightForm = this.fb.group({
@@ -33,27 +36,37 @@ export class AddFlightComponent implements OnInit {
       depAirportCode: ['', Validators.required],
       arrAirportCode: ['', Validators.required],
       departure: ['', Validators.required],
-      arrival: ['', Validators.required],
       duration: [0, Validators.required]
     });
   }
 
   ngOnInit() {
-    this.loadMetadata();
-  }
-
-  loadMetadata() {
+console.log("Fetching flight metadata...");
     this.flightService.getFlightMetaData();
-
   }
 
+ private formatDate(date: Date | null): string | undefined {
+    if (!date) return undefined;
+    const d = new Date(date);
+    d.setDate(d.getDate());
+
+    d.setHours(12, 0, 0, 0); 
+    return d.toISOString().split('T')[0];
+  }
   onSubmit() {
     if (this.flightForm.valid) {
       this.loading.set(true);
-      const input = {
-        ...this.flightForm.value,
-        duration: Number(this.flightForm.value.duration)
-      };
+       const createData = {
+       flightNumber: this.flightForm.value.flightNumber,
+      airlineCode: this.flightForm.value.airlineCode,
+      depAirportCode: this.flightForm.value.depAirportCode,
+      arrAirportCode: this.flightForm.value.arrAirportCode,
+      departure: this.formatDate(this.flightForm.value.departure), // Raw Date object
+      arrival: this.formatDate(this.flightForm.value.departure),   // Raw Date object
+      duration: Number(this.flightForm.value.duration)
+    };
+       console.log("Creating flight with data:", createData);
+      this.flightService.addFlight(createData)
 
       
     }
