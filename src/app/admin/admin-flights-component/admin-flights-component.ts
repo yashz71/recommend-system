@@ -73,8 +73,8 @@ export class AdminFlightsComponent implements OnInit {
     }
   }
 
-  onEdit(flight: any) {
-    // Open a dialog or navigate to edit page
+  onEdit(flightNumber: String) {
+    this.router.navigate(['admin/home/edit-flight',flightNumber]);
   }
 
   onAddFlight() {

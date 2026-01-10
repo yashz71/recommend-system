@@ -30,6 +30,13 @@ const CREATE_FLIGHT = gql`
     }
   }
 `;
+const UPDATE_FLIGHT = gql`
+  mutation UpdateFlight($flightNumber: String!,$input: CreateFlightInput!) {
+    updateFlight(flightNumber: $flightNumber,  input: $input) {
+      flightNumber
+    }
+  }
+`;
 const GET_CITIES = gql`
   query Cities {
     cities
@@ -298,12 +305,34 @@ public metadata = signal<FlightMetadata | null>(null);
       
       // Update the signal so the list of flights updates in real-time
       this.allFlights.update(flights => [...flights, newFlight]);
-      
+      this.router.navigate(['/admin/home/flights']);
+
       console.log('Flight created successfully:', newFlight);
-      this.router.navigate(['/flights']); // Redirect after success
     },
     error: (err) => {
       console.error('Error creating flight:', err);
+      // You can set an error signal here to show a message in the UI
+    }
+  });
+}
+updateFlight(flightNumber: String,input: any) {
+  return this.apollo.mutate<any>({
+    mutation: UPDATE_FLIGHT,
+    variables: {
+      flightNumber ,input
+    }
+  }).subscribe({
+    next: (result) => {
+      const newFlight = result.data.updateFlight;
+      
+      // Update the signal so the list of flights updates in real-time
+      this.allFlights.update(flights => [...flights, newFlight]);
+      this.router.navigate(['/admin/home/flights']);
+
+      console.log('Flight updated successfully:', newFlight);
+    },
+    error: (err) => {
+      console.error('Error updating flight:', err);
       // You can set an error signal here to show a message in the UI
     }
   });

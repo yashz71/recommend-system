@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'admin/home/flights', component: AdminFlightsComponent,canActivate: [adminGuard] },
   { path: 'admin/home/users', component: AdminUsersComponent,canActivate: [adminGuard] },
   { path: 'admin/home/add-flight', component: AddFlightComponent,canActivate: [adminGuard] },
+  { path: 'admin/home/edit-flight/:id', component: AddFlightComponent,canActivate: [adminGuard] },
 
   { path: 'Flight/:flightNumber', component: FlightDetail,canActivate: [authGuard] },
   { path: 'recommended', component: RecommendFlightComponent,canActivate: [authGuard] },

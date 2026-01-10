@@ -1,1 +1,45 @@
-<p>admin-users-component works!</p>
+<div class="admin-user-page">
+    <div class="header-section">
+      <div class="glitch-title" data-text="USER_DOSSIER_ACCESS">USER_DOSSIER_ACCESS</div>
+      <button class="cyber-add-btn" (click)="onAddUser()">
+        <mat-icon>person_add</mat-icon>
+        <span>INITIALIZE NEW SUBJECT</span>
+      </button>
+    </div>
+  
+    <div class="dossier-grid">
+      @for (user of userService.allUsers(); track user.id) {
+        <div class="user-packet">
+          <div class="scanline"></div>
+          <div class="packet-header">
+            <div class="status-indicator" [class.admin]="user.roles?.includes('ADMIN')"></div>
+            <span class="user-id">UID_{{ user.id.substring(0,8) }}</span>
+          </div>
+  
+          <div class="packet-content">
+            <div class="avatar-frame">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-details">
+              <h3 class="user-name">{{ user.username | uppercase }}</h3>
+              <p class="user-email">{{ user.email }}</p>
+              <div class="role-tags">
+                @for (role of user.roles; track role) {
+                  <span class="role-badge">{{ role }}</span>
+                }
+              </div>
+            </div>
+          </div>
+  
+          <div class="packet-actions">
+            <button class="action-btn edit" (click)="onEditUser(user.id)" matTooltip="MODIFY DATA">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="action-btn delete" (click)="onDeleteUser(user.id)" matTooltip="TERMINATE ACCESS">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>

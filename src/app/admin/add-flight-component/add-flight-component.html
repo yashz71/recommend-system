@@ -1,8 +1,8 @@
 <div class="add-flight-container">
-    <div class="terminal-header">
-      <mat-icon class="text-cyan">add_box</mat-icon>
-      <span>CREATE NEW FLIGHT NODE</span>
-    </div>
+  <div class="terminal-header">
+    <mat-icon class="text-cyan">{{ isEditMode() ? 'edit' : 'add_box' }}</mat-icon>
+    <span>{{ isEditMode() ? 'UPDATE FLIGHT NODE: ' + flightForm.get('flightNumber')?.value : 'CREATE NEW FLIGHT NODE' }}</span>
+  </div>
   
     <form [formGroup]="flightForm" (ngSubmit)="onSubmit()" class="cyber-form">
       <div class="form-row">
@@ -58,8 +58,11 @@
       </div>
   
       <button mat-flat-button class="submit-btn" [disabled]="flightForm.invalid || loading()">
-        @if (loading()) { <span class="blink">EXECUTING...</span> }
-        @else { <span>INSERT INTO GRAPH</span> }
+        @if (loading()) { 
+          <span class="blink">EXECUTING...</span> 
+        } @else { 
+          <span>{{ isEditMode() ? 'UPDATE GRAPH NODE' : 'INSERT INTO GRAPH' }}</span> 
+        }
       </button>
     </form>
   </div>

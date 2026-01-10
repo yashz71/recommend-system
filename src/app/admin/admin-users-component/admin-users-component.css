@@ -1,0 +1,152 @@
+.admin-user-page {
+    background-color: #050a0f;
+    min-height: 100vh;
+    padding: 40px;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    border-left: 5px solid #00bcd4;
+    padding-left: 20px;
+  }
+  
+  .glitch-title {
+    color: #00bcd4;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    position: relative;
+  }
+  
+  /* Creative Add Button */
+  .cyber-add-btn {
+    background: transparent;
+    border: 1px solid #00bcd4;
+    color: #00bcd4;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .cyber-add-btn:hover {
+    background: rgba(0, 188, 212, 0.1);
+    box-shadow: 0 0 15px #00bcd4;
+  }
+  
+  /* User Packet Cards */
+  .dossier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+  }
+  
+  .user-packet {
+    background: rgba(10, 17, 24, 0.8);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s ease;
+  }
+  
+  .user-packet:hover {
+    border-color: #00bcd4;
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 188, 212, 0.1);
+  }
+  
+  /* Scanning Animation */
+  .scanline {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 188, 212, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: scan 4s linear infinite;
+  }
+  
+  @keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+  }
+  
+  .status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4caf50; /* Green for users */
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .status-indicator.admin {
+    background: #ff9800; /* Orange for admins */
+    box-shadow: 0 0 8px #ff9800;
+  }
+  
+  .user-id {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+  }
+  
+  .packet-content {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .avatar-frame {
+    color: #00bcd4;
+    opacity: 0.7;
+  }
+  
+  .user-name {
+    color: white;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  
+  .user-email {
+    color: rgba(0, 188, 212, 0.6);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  
+  .role-badge {
+    background: rgba(0, 188, 212, 0.1);
+    border: 1px solid #00bcd4;
+    color: #00bcd4;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    margin-right: 5px;
+  }
+  
+  .packet-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid rgba(0, 188, 212, 0.1);
+    padding-top: 15px;
+  }
+  
+  .action-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .action-btn.edit { color: #00bcd4; }
+  .action-btn.delete { color: #ff5252; }
+  
+  .action-btn:hover { transform: translateY(-3px); }
