@@ -54,6 +54,10 @@ console.log("Fetching flight metadata...");
       }, 2000);
     }
   }
+  onAbort(){
+    this.router.navigate(['admin/home/flights']);
+
+  }
   loadFlightForEdit() {
     this.loading.set(true);
     const flight  = this.flightService.selectedFlightSignal();

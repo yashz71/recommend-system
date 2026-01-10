@@ -56,7 +56,9 @@
           <input matInput type="number" formControlName="duration">
         </mat-form-field>
       </div>
-  
+      <button mat-button type="button" class="cancel-btn" (click)="onAbort()">
+        ABORT_CHANGES
+      </button>
       <button mat-flat-button class="submit-btn" [disabled]="flightForm.invalid || loading()">
         @if (loading()) { 
           <span class="blink">EXECUTING...</span> 

@@ -23,17 +23,16 @@ export class AdminUsersComponent {
 
   
   onAddUser() {
-    this.router.navigate(['/admin/users/add']);
+    this.router.navigate(['admin/home/add-user']);
   }
 
   onEditUser(userId: string) {
-    this.router.navigate(['/admin/users/edit', userId]);
+    this.router.navigate(['admin/home/edit-user', userId]);
   }
 
   onDeleteUser(userId: string) {
     if (confirm('CAUTION: PERMANENTLY ERASE USER IDENTITY FROM GRAPH?')) {
-      // Call your delete logic here
-      this.users.update(list => list.filter(u => u.id !== userId));
+      this.userService.delUser(userId);
     }
   }
 }

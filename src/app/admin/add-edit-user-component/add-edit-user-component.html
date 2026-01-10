@@ -1,1 +1,46 @@
-<p>add-edit-user-component works!</p>
+<div class="identity-container">
+    <div class="glitch-header">
+      <mat-icon class="text-cyan">{{ isEditMode() ? 'security' : 'person_add' }}</mat-icon>
+      <span>{{ isEditMode() ? 'MODIFY_IDENTITY_PROPS' : 'INITIALIZE_NEW_SUBJECT' }}</span>
+    </div>
+  
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="terminal-form">
+      <div class="auth-box">
+        <mat-form-field appearance="outline" class="cyber-input">
+          <mat-label>SUBJECT_ALIAS</mat-label>
+          <input matInput formControlName="username" placeholder="Enter username...">
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="cyber-input">
+          <mat-label>COMM_PROTOCOL_EMAIL</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="user@domain.net">
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="cyber-input">
+          <mat-label>ACCESS_LEVEL_PERMISSIONS</mat-label>
+          <mat-select formControlName="roles" multiple>
+            @for (role of availableRoles; track role) {
+              <mat-option [value]="role">{{ role }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+  
+        @if (!isEditMode()) {
+          <mat-form-field appearance="outline" class="cyber-input">
+            <mat-label>ENCRYPTION_KEY_PASSWORD</mat-label>
+            <input matInput formControlName="password" type="password" placeholder="••••••••">
+          </mat-form-field>
+        }
+      </div>
+  
+      <div class="form-actions">
+        <button mat-button type="button" class="cancel-btn" (click)="onAbort()">
+          ABORT_CHANGES
+        </button>
+        <button mat-flat-button class="submit-btn" [disabled]="userForm.invalid || loading()">
+          @if (loading()) { <span class="blink">WRITING_TO_DATABASE...</span> }
+          @else { <span>{{ isEditMode() ? 'SYNC_IDENT_NODE' : 'COMMITT_NEW_USER' }}</span> }
+        </button>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,79 @@
+body{
+    background: #050a0f;
+  }
+.identity-container {
+    background: #020508;
+    border-left: 4px solid #00bcd4;
+    padding: 30px;
+    max-width: 600px;
+    margin: 50px auto;
+    box-shadow: -10px 0 20px rgba(0, 188, 212, 0.05);
+    font-family: 'Courier New', monospace;
+  }
+  
+  .glitch-header {
+    color: #00bcd4;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+  
+  .auth-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Cyber Theme for Material Fields */
+  ::ng-deep .mat-mdc-form-field-outline {
+    color: rgba(0, 188, 212, 0.2) !important;
+  }
+  
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: rgba(0, 188, 212, 0.02) !important;
+  }
+  
+  ::ng-deep .mat-mdc-form-field-label {
+    color: #00bcd4 !important;
+    opacity: 0.6;
+  }
+  
+  ::ng-deep .mat-mdc-select-value-text, ::ng-deep .mat-mdc-input-element {
+    color: #e0e0e0 !important;
+  }
+  
+  .form-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+  
+  .submit-btn {
+    background-color: #00bcd4 !important;
+    color: #000 !important;
+    font-weight: 900;
+    border-radius: 0;
+    padding: 0 30px;
+  }
+  
+  .cancel-btn {
+    color: #ff5252 !important;
+    border: 1px solid rgba(255, 82, 82, 0.3) !important;
+    border-radius: 0;
+  }
+  
+  .blink {
+    animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }

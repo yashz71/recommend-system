@@ -24,26 +24,17 @@ const REGISTER_MUTATION = gql`
     }
   }
 `;
-const ADD_USER = gql`
-mutation AddUser($registerInput: RegisterInput!) {
-  addUser(registerInput: $registerInput) {
-    user {
-      
+
+
+const UPDATE_ADMIN = gql`
+  mutation UpdateAdmin($id: String!, $input: UpdateUserInput!) {
+    updateAdmin(id: $id, input: $input) {
+      id
       username
-      
+      email
+      roles
     }
   }
-}
-`;
-const UPDATE_USER = gql`
-mutation UpdateUser($id: String!, $input: input!) {
-  updateProfile(id: $id, input: $input) {
-  
-      username
-      
-    
-  }
-}
 `;
 const  DELETE_USER= gql`
 mutation DeleteUser($id: String!){
@@ -51,14 +42,35 @@ mutation DeleteUser($id: String!){
   
 }
 `;
+const ADD_USER = gql`
+  mutation AddUser($addUserInput: AddUserInput!) {
+    addUser(addUserInput: $addUserInput) {
+      id        # No 'user {}' wrapper because backend returns User directly
+      username
+      email 
+      roles
+    }
+  }
+`;
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($id: String!, $input: UpdateUserInput!) { # Use UpdateUserInput type
+    updateProfile(id: $id, input: $input) {
+      id
+      username
+      email
+      roles
+    }
+  }
+`;
 
 const GET_USERS = gql`
-  query AllUsers {
-    user {
-        email
-        username
-        roles
-      
+  query GetAllUsers {
+    allUsers {
+      id
+      username
+      email
+      roles
     }
   }
 `;
@@ -71,18 +83,24 @@ export class UserService {
 
 
   getAllUsers(){
-    return this.apollo.query<any>({
-      query: GET_USERS
-      ,
-      fetchPolicy: 'network-only' // Ensure we don't get a cached 'null'
-      }).pipe( map(result => result.data.users),
-      tap((users) => {
-      this.allUsers.set(users);
-      console.log(this.allUsers());
+    console.log("getUSERS in service is starting");
+  return this.apollo.query<any>({
+    query: GET_USERS,
+    fetchPolicy: 'network-only'
+  }).subscribe({
+    next: (result) => {
+      if (result.data.allUsers) {
+        console.log('users fetched successfully from Neo4j',result.data.allUsers );
+        this.allUsers.set(result.data.allUsers);
+      };
       
-      })
-      );
+    },
+    error: (error) => {
+      console.error('fetch failed', error);
+      alert('Error: You might not have the permissions to fetch users.');
+    }});
   }
+  
   // Signal to hold the current user globally
   checkSession() {
     return this.apollo.query<any>({
@@ -133,36 +151,62 @@ export class UserService {
     return this.apollo.mutate<any>({
       mutation: DELETE_USER,
       variables: { id }
-    }).pipe(
-      tap(result => {
-        if (result.data?.removeUser) {
-          this.allUsers.update(users => users.filter(u => u.id !== id));
+    }).subscribe({
+      next: (result) => {
+        if (result.data.removeUser) {
+          // 3. Update the UI Signal locally so the card disappears
+          this.allUsers.update((users: any[]) => 
+            users.filter(f => f.id !== id)
+          );
+          console.log('user deleted successfully from Neo4j');
         }
-      })
-    );
+      },
+      error: (error) => {
+        console.error('Delete failed', error);
+        alert('Error: You might not have the permissions to delete users.');
+      }
+    });
 
   }
-  updateUser(id: String, input:any){
-    return this.apollo.mutate<any>({
-      mutation:  UPDATE_USER,
-      variables: { id, input }
-    }).pipe(
-      map(result => result.data.updateUser)
-    );
-
-  }
-  addUser(registerInput: any) { 
+  addUser(addUserInput: any) {
     return this.apollo.mutate<any>({
       mutation: ADD_USER,
-      variables: { registerInput }
+      variables: { addUserInput }
     }).pipe(
-      map((result: { data: { add: any; }; }) => result.data.add),
-      tap((authResponse: { user: any; }) => {
-        if(authResponse.user) return true;
-        else{
-          return false;
-        }
+      map(result => result.data.addUser), // Removed .user nesting
+      tap(newUser => {
+        this.allUsers.update(users => [...users, newUser]);
       })
     );
-  } 
+  }
+
+  updateUser(id: string, input: any) {
+    return this.apollo.mutate<any>({
+      mutation: UPDATE_USER,
+      variables: { id, input }
+    }).pipe(
+      map(result => result.data.updateProfile), // Matches the mutation call name
+      tap(updatedUser => {
+        this.allUsers.update(users => 
+          users.map(u => u.id === updatedUser.id ? updatedUser : u)
+        );
+      })
+    );
+  }
+  updateAdmin(id: string, input: any) {
+    return this.apollo.mutate<any>({
+      mutation: UPDATE_ADMIN,
+      variables: { id, input }
+    }).pipe(
+      map(result => result.data.updateAdmin), // Directly returns User
+      tap(updatedUser => {
+        // Find and replace the user in the signal list
+        this.allUsers.update(users => 
+          users.map(u => u.id === updatedUser.id ? updatedUser : u)
+        );
+      })
+    );
+  }
+  
+ 
 }
