@@ -1,0 +1,155 @@
+.profile-viewport {
+    background: #000;
+    min-height: calc(100vh - 70px);
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .terminal-pane {
+    background: #080808;
+    border: 1px solid rgba(0, 188, 212, 0.2);
+    padding: 30px;
+    position: relative;
+  }
+  
+  .pane-header {
+    background: #00bcd4;
+    color: #000;
+    font-weight: 900;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    margin-bottom: 30px;
+    width: fit-content;
+  }
+  
+  /* Identity Pane Styles */
+  .biometric-hex {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #00bcd4;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00bcd4;
+    transform: rotate(45deg);
+  }
+  .biometric-hex mat-icon { transform: rotate(-45deg); font-size: 40px; width: 40px; height: 40px; }
+  
+  .data-row {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 5px;
+  }
+  .data-row .label { color: #00bcd4; margin-right: 10px; font-size: 0.8rem; }
+  .data-row .value { color: #fff; font-family: 'Courier New', monospace; }
+  
+  .edit-trigger {
+    width: 100%;
+    margin-top: 20px;
+    color: #00bcd4 !important;
+    border-color: #00bcd4 !important;
+    border-radius: 0;
+  }
+  
+  /* Flight Logs Styles */
+  .logs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .log-entry {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    background: #0c0c0c;
+  }
+  
+  .log-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .log-id { color: #00bcd4; font-weight: bold; }
+  
+  .log-status { font-size: 0.7rem; padding: 2px 6px; border: 1px solid;}
+  .log-status.arrived { color: #4caf50; border-color: #4caf50; }
+  .log-status.boarding { color: #ff9800; border-color: #ff9800; animation: blink 1s infinite; }
+  
+  .log-route {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+  }
+  
+  .log-date { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 5px; }
+  
+  .logout-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    background: #ff5252 !important;
+    border-radius: 0;
+  }
+  .log-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+    padding: 10px 0;
+    border-top: 1px dashed rgba(0, 188, 212, 0.2);
+    border-bottom: 1px dashed rgba(0, 188, 212, 0.2);
+  }
+  
+  .route-point {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .city-name {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+  }
+  
+  .airport-code {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+  
+  .log-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 10px;
+  }
+  
+  .log-status.completed {
+    color: #4caf50;
+    border: 1px solid #4caf50;
+    padding: 2px 6px;
+  }
+  
+  .text-cyan {
+    color: #00bcd4;
+  }
+  
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .animate-in { animation: slideUp 0.3s ease-out; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

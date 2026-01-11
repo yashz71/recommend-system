@@ -28,6 +28,13 @@ export class App implements OnInit {
       }
     });
   }
+  onGoProfile() {
+    
+  
+      // Navigate to the edit profile page using the current user's ID
+      this.router.navigate(['/profile']);
+    
+  }
 adminPage(){
   this.router.navigate(['/admin/home']);
 }

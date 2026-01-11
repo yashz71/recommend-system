@@ -8,6 +8,24 @@
   align-items: center;
   padding: 0 24px;
 }
+.profile-btn {
+  border-radius: 0 !important;
+  border: 1px solid #00bcd4 !important;
+  color: #00bcd4 !important;
+  background: transparent;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+  background: rgba(0, 188, 212, 0.1) !important;
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
+}
+
+.user-alias {
+  margin-left: 8px;
+  font-weight: bold;
+}
 
 /* Brand Styling */
 .brand-name {

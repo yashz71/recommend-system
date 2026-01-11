@@ -151,6 +151,39 @@ query getRecommendedFlightsByBooking($userId: String!) {
   }
 }
 `;
+const GET_HAS_BOOKED = gql`
+query getHasBooked($userId: String!) {
+  getHasBooked(userId: $userId) {
+    flightNumber
+    departure
+    arrival
+    duration
+    airline {
+      code
+      name
+    }
+    departureAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    arrivalAirport {
+      code
+      city {
+        name
+        country
+      }
+    }
+    prices {
+      type
+      amount
+      currency
+    }
+  }
+}
+`;
 const SEARCH_FLIGHTS =gql`
 query SearchFlights($search: FlightSearchInput!) {
   searchFlights(search: $search) {
@@ -184,6 +217,7 @@ query SearchFlights($search: FlightSearchInput!) {
   }
 }
 `;
+
 const FLIGHT_BY_NUMBER =gql`
 query getFlight($flightNumber: String!) {
   getFlight(flightNumber: $flightNumber) {
@@ -248,6 +282,7 @@ public allFlights= signal<any[]>([]);
 public metadata = signal<FlightMetadata | null>(null);
   searchResults = signal<any[]>([]);
   isSearching = signal<boolean>(false);
+  public hasBooked = signal<any[]>([]);
   deleteFlight(flightNumber: String){
     
     this.apollo.mutate<any>({
@@ -424,6 +459,22 @@ updateFlight(flightNumber: String,input: any) {
       next: (result) => {
         this.recommendedFlightsByBooking.set(result.data.getRecommendedFlightsByBooking);
         console.log("resul recbybooking",result)
+      },
+      error: (err) => {
+        console.error('rec failed', err);
+      }
+    });
+  }
+  getHasBooked() {
+    const userId = this.userService.currentUser().id; // Replace with actual auth logic
+  
+    this.apollo.query<any>( {
+      query: GET_HAS_BOOKED,
+      variables:  { userId } 
+    }).subscribe({
+      next: (result) => {
+        this.hasBooked.set(result.data.getHasBooked);
+        console.log("resul hasbooked",result)
       },
       error: (err) => {
         console.error('rec failed', err);

@@ -52,6 +52,11 @@ const ADD_USER = gql`
     }
   }
 `;
+const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout
+  }
+`;
 
 const UPDATE_USER = gql`
   mutation UpdateUser($id: String!, $input: UpdateUserInput!) { # Use UpdateUserInput type
@@ -100,7 +105,17 @@ export class UserService {
       alert('Error: You might not have the permissions to fetch users.');
     }});
   }
-  
+  logout() {
+    return this.apollo.mutate({
+      mutation: LOGOUT_MUTATION
+    }).pipe(
+      tap(() => {
+        this.currentUser.set(null); // Clear local signal
+        // Force reload to clear all cached states and reset the app
+        window.location.href = '/login'; 
+      })
+    );
+  }
   // Signal to hold the current user globally
   checkSession() {
     return this.apollo.query<any>({

@@ -1,0 +1,70 @@
+<div class="profile-viewport">
+    <div class="profile-grid">
+      
+      <div class="terminal-pane identity-pane">
+        <div class="pane-header">IDENTITY_RECORD</div>
+        
+          <div class="identity-display">
+            <div class="biometric-hex">
+              <mat-icon>fingerprint</mat-icon>
+            </div>
+            <div class="data-row">
+              <span class="label">ALIAS:</span>
+              <span class="value">{{ userService.currentUser()?.username }}</span>
+            </div>
+            <button mat-flat-button class="logout-btn" (click)="onLogout()">
+                TERMINATE_SESSION
+              </button>
+            
+          </div>
+        
+       
+      </div>
+  
+      <div class="terminal-pane logs-pane">
+        <div class="pane-header">FLIGHT_LOGS_HISTORY</div>
+        <div class="logs-container">
+            @for (flight of flightService.hasBooked(); track flight.flightNumber) {
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span class="log-id">{{ flight.flightNumber }}</span>
+                  <span class="log-status" [class.completed]="isPast(flight.arrival)">
+                    {{ isPast(flight.arrival) ? 'MISSION_COMPLETE' : 'EN_ROUTE' }}
+                  </span>
+                </div>
+          
+                <div class="log-route">
+                  <div class="route-point">
+                    <span class="city-name">{{ flight.departureAirport.city.name }}</span>
+                    <span class="airport-code text-cyan">{{ flight.departureAirport.code }}</span>
+                  </div>
+                  
+                  <mat-icon class="route-arrow">trending_flat</mat-icon>
+                  
+                  <div class="route-point">
+                    <span class="city-name">{{ flight.arrivalAirport.city.name }}</span>
+                    <span class="airport-code text-cyan">{{ flight.arrivalAirport.code }}</span>
+                  </div>
+                </div>
+          
+                <div class="log-footer">
+                  <div class="log-date">
+                    <mat-icon>calendar_today</mat-icon>
+                    {{ flight.departure | date:'dd MMM yyyy HH:mm' }}
+                  </div>
+                  <div class="log-airline">
+                    {{ flight.airline.name }} ({{ flight.airline.code }})
+                  </div>
+                  <div class="log-price text-cyan">
+                    {{ flight.prices[0]?.amount }} {{ flight.prices[0]?.currency }}
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-logs">NO_DATA_RECORDS_FOUND</div>
+            }
+          </div>
+      </div>
+  
+    </div>
+  </div>

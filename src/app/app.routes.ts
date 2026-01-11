@@ -11,6 +11,7 @@ import { AdminUsersComponent } from './admin/admin-users-component/admin-users-c
 import { AdminFlightsComponent } from './admin/admin-flights-component/admin-flights-component';
 import { AddFlightComponent } from './admin/add-flight-component/add-flight-component';
 import { AddEditUserComponent } from './admin/add-edit-user-component/add-edit-user-component';
+import { ProfileComponent } from './profile-component/profile-component';
 export const routes: Routes = [
   { path: 'home', component: Home,canActivate: [authGuard] },
   { path: 'admin/home', component: AdminHomeComponent,canActivate: [adminGuard] },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'admin/home/edit-flight/:id', component: AddFlightComponent,canActivate: [adminGuard] },
   { path: 'admin/home/edit-user/:id', component: AddEditUserComponent,canActivate: [adminGuard] },
   { path: 'admin/home/add-user', component: AddEditUserComponent,canActivate: [adminGuard] },
+  { path: 'profile', component: ProfileComponent,canActivate: [authGuard] },
 
   { path: 'Flight/:flightNumber', component: FlightDetail,canActivate: [authGuard] },
   { path: 'recommended', component: RecommendFlightComponent,canActivate: [authGuard] },
